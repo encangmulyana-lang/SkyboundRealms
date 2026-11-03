@@ -27,19 +27,19 @@ pre{white-space:pre-wrap;background:#0b1226;padding:12px;border-radius:10px;over
 <h1>SKYBOUND<br>REALMS</h1>
 <p>Ancient temples, sky dragons, and a mysterious civilization — drifting above a sea of clouds, waiting to be claimed.</p>
 <p><a class="btn" href="#mint" style="text-decoration:none">MINT YOUR NFT</a></p>
-<p class="muted">Contract status: <b>NOT DEPLOYED YET</b> — this preview shows the design only. No transaction can be made from this page until the contract is deployed. This page will not fake a transaction.</p></div>
+<p class="muted">Contract is LIVE on BNB Chain: 0x2e14f8581Eb17eA90F22fa8Bcd0EbEd18bD56F88 — mint is currently <b>PAUSED</b> (opens after baseURI is set and mint is opened). This page will not fake a transaction.</p></div>
 
 <div class="card" id="mint"><h2>MINT SKYBOUND</h2>
 <p><b>Collection:</b> SkyboundRealms (SKY) • <b>Price:</b> 0.0002 BNB • <b>Supply:</b> 2,222 • <b>Max:</b> 10 per transaction</p>
-<p><b>Minted:</b> 0 / 2,222 • <b>Contract:</b> <code>to be deployed</code></p>
+<p><b>Minted:</b> 0 / 2,222 • <b>Contract:</b> <code>0x2e14f8581Eb17eA90F22fa8Bcd0EbEd18bD56F88</code></p>
 <div class="qrow"><button onclick="chg(-1)">−</button><input id="qty" value="1" readonly><button onclick="chg(1)">+</button><button onclick="setMax()" style="width:auto;padding:0 18px">MAX</button></div>
 <p id="total" style="font-weight:700;text-align:center">Total: 0.0002 BNB</p>
 <p><button class="btn" id="connectBtn" onclick="connectWallet()">CONNECT WALLET</button></p>
 <p><button class="btn btn2" id="mintBtn" onclick="mintNFT()" disabled>MINT NFT</button></p>
-<p id="walletStatus" class="muted">Wallet mint is the primary route. On a phone, open this site inside a wallet app browser (Binance / MetaMask / Trust Wallet) — a regular phone browser has no wallet to connect. Mint button activates once the contract is deployed.</p>
+<p id="walletStatus" class="muted">Wallet mint is the primary route. On a phone, open this site inside a wallet app browser (Binance / MetaMask / Trust Wallet) — a regular phone browser has no wallet to connect. Mint button activates once mint is opened.</p>
 <p id="txlog" class="muted">No transaction has been created from this page.</p>
 <div class="card"><p><b>Mint with your agent — alternative (after deploy):</b></p>
-<pre>Contract: to be deployed (SkyboundRealms / SKY, ERC-721)
+<pre>Contract: 0x2e14f8581Eb17eA90F22fa8Bcd0EbEd18bD56F88 (SkyboundRealms / SKY, ERC-721)
 Function: mint(uint256 quantity), selector 0xa0712d68
 Quantity: up to 10, Price: 0.0002 BNB each, Supply: 2,222, BNB Chain (56)</pre></div></div>
 
@@ -59,9 +59,9 @@ Quantity: up to 10, Price: 0.0002 BNB each, Supply: 2,222, BNB Chain (56)</pre><
 </div>
 <script src="https://cdn.jsdelivr.net/npm/ethers@6.17.0/dist/ethers.umd.min.js"></script>
 <script>
-const CONTRACT=''; const PRICE_WEI=200000000000000n; let skySigner=null;
+const CONTRACT='0x2e14f8581Eb17eA90F22fa8Bcd0EbEd18bD56F88'; const PRICE_WEI=200000000000000n; let skySigner=null;
 function chg(d){let q=parseInt(document.getElementById('qty').value)+d; if(q<1)q=1; if(q>10)q=10; document.getElementById('qty').value=q; document.getElementById('total').textContent='Total: '+(q*0.0002).toFixed(4)+' BNB';}
 function setMax(){document.getElementById('qty').value=10; document.getElementById('total').textContent='Total: 0.0020 BNB';}
-async function connectWallet(){const st=document.getElementById('walletStatus');if(!window.ethereum){st.textContent='No browser wallet detected in this browser. On a phone, open this site inside a wallet app browser (Binance / MetaMask / Trust Wallet).';return;}try{const provider=new ethers.BrowserProvider(window.ethereum);await provider.send('eth_requestAccounts',[]);const net=await provider.getNetwork();if(net.chainId!==56n){try{await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]});}catch(e){await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc-dataseed.bnbchain.org'],blockExplorerUrls:['https://bscscan.com']}]});}}skySigner=await provider.getSigner();const addr=await skySigner.getAddress();st.textContent='Connected: '+addr.slice(0,6)+'…'+addr.slice(-4)+' (BNB Chain)';document.getElementById('connectBtn').textContent='WALLET CONNECTED';if(CONTRACT)document.getElementById('mintBtn').disabled=false;}catch(e){st.textContent='Connection failed: '+(e.message||e);}}
+async function connectWallet(){const st=document.getElementById('walletStatus');if(!window.ethereum){st.textContent='No browser wallet detected in this browser. On a phone, open this site inside a wallet app browser (Binance / MetaMask / Trust Wallet).';return;}try{const provider=new ethers.BrowserProvider(window.ethereum);await provider.send('eth_requestAccounts',[]);const net=await provider.getNetwork();if(net.chainId!==56n){try{await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]});}catch(e){await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc-dataseed.bnbchain.org'],blockExplorerUrls:['https://bscscan.com']}]});}}skySigner=await provider.getSigner();const addr=await skySigner.getAddress();st.textContent='Connected: '+addr.slice(0,6)+'…'+addr.slice(-4)+' (BNB Chain)';document.getElementById('connectBtn').textContent='WALLET CONNECTED';st.textContent+=' — mint is currently PAUSED, so the MINT button stays disabled until mint opens.';}catch(e){st.textContent='Connection failed: '+(e.message||e);}}
 async function mintNFT(){const log=document.getElementById('txlog');if(!CONTRACT){log.textContent='Contract not deployed yet — minting opens after deploy.';return;}if(!skySigner){document.getElementById('walletStatus').textContent='Connect your wallet first.';return;}const qty=parseInt(document.getElementById('qty').value)||1;try{log.textContent='Waiting for wallet approval…';const c=new ethers.Contract(CONTRACT,['function mint(uint256 quantity) payable'],skySigner);const tx=await c.mint(qty,{value:BigInt(qty)*PRICE_WEI});log.textContent='Transaction sent: '+tx.hash+' — waiting for confirmation…';await tx.wait();log.innerHTML='✅ Minted '+qty+' SKYBOUND! <a href="https://bscscan.com/tx/'+tx.hash+'" target="_blank" rel="noopener">View on BscScan</a>';}catch(e){log.textContent='Mint failed: '+(e.reason||e.message||e);}}
 </script></body></html>
